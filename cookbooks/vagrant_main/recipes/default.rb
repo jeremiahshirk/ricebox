@@ -15,6 +15,14 @@ node.override['mysql']['bind_address'] = '127.0.0.1'
 node.override['mysql']['tunable']['max_allowed_packet'] = '20M'
 node.override['mysql']['tunable']['max_connections'] = '100'
 
+node.override['tomcat']['java_options'] = '-Xmx512m -XX:MaxPermSize=256m'
+
+# rice parameters
+node.override['rice']['datasource']['username'] = 'RICE'
+node.override['rice']['datasource']['password'] = 'RICE'
+node.override['rice']['datasource']['database'] = 'rice'
+node.override['nat_hostname'] = 'cognus.ome.ksu.edu'
+
 require_recipe "build-essential"
 require_recipe "apt"
 require_recipe "tar"
@@ -25,8 +33,16 @@ require_recipe "mysql"
 require_recipe "mysql::server"
 require_recipe "maven"
 
+# link mysql java connector into tomcat
+link "/var/lib/tomcat6/common/mysql-connector-java.jar" do
+  to "/usr/share/java/mysql-connector-java.jar"
+end
+
 # misc packages
 package "subversion" do
+  action :install
+end
+package "libmysql-java" do
   action :install
 end
 
@@ -41,9 +57,33 @@ directory "/opt/sources" do
 end
 
 # RICE standalone server
-cookbook_file "/var/lib/tomcat6/webapps/rice-standalone-2.0.0-rc4-SNAPSHOT.war" do
+cookbook_file "/var/lib/tomcat6/webapps/kr-dev.war" do
   source "rice-standalone-2.0.0-rc4-SNAPSHOT.war"
   mode "0644"
+  notifies :restart, resources(:service => "tomcat")
+end
+
+# rice config
+directory "/usr/local/rice" do
+  owner "vagrant"
+  group "vagrant"
+  mode "0755"
+  action :create
+  recursive true
+end
+template "/usr/local/rice/rice-config.xml" do
+  source "rice-config.xml.erb"
+  owner "vagrant"
+  group "vagrant"
+  mode 0644
+  notifies :restart, resources(:service => "tomcat")
+end
+
+template "/usr/local/rice/log4j.properties" do
+ source "log4j.properties.erb"
+ owner "vagrant"
+ group "vagrant"
+ mode 0644
 end
 
 #tar_package 'http://maven.kuali.org/release/org/kuali/rice/rice-dist/2.0.0-rc2/rice-dist-2.0.0-rc2-server.tar.gz' do
