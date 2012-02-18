@@ -36,13 +36,14 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 8080
+  config.vm.forward_port 80, 8000
+  config.vm.forward_port 8080, 8080
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
-  config.vm.share_folder("sources", "/opt/sources", "../rice_source",
+  config.vm.share_folder("sources", "/opt/sources", "rice_source",
     :owner => "vagrant", :group => "vagrant")
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.

@@ -7,9 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
-
 node.override["java"]["install_flavor"] = "oracle"
-node.override['maven']['version'] = 3
+#node.override['maven']['version'] = 3
 # change the mysql root password before running 'vagrant up'
 node.override['mysql']['server_root_password'] = 'change_me_Q2JED3yHrlVf'
 node.override['mysql']['bind_address'] = '127.0.0.1'
@@ -31,7 +30,9 @@ package "subversion" do
   action :install
 end
 
-# RICE source
+# Maven 3
+
+# RICE source, needs to be set up outside the VM in shared directory
 directory "/opt/sources" do
   owner "vagrant"
   group "vagrant"
@@ -40,9 +41,25 @@ directory "/opt/sources" do
 end
 
 # RICE standalone server
-tar_package 'http://maven.kuali.org/release/org/kuali/rice/rice-dist/2.0.0-rc2/rice-dist-2.0.0-rc2-server.tar.gz' do
-  prefix '/opt/kuali/rice/rice-dist/2.0.0-rc2'
-  creates '/opt/kuali/rice/rice-dist/2.0.0-rc2/kr-dev.war'
+cookbook_file "/var/lib/tomcat6/webapps/rice-standalone-2.0.0-rc4-SNAPSHOT.war" do
+  source "rice-standalone-2.0.0-rc4-SNAPSHOT.war"
+  mode "0644"
+end
+
+#tar_package 'http://maven.kuali.org/release/org/kuali/rice/rice-dist/2.0.0-rc2/rice-dist-2.0.0-rc2-server.tar.gz' do
+#  prefix '/opt/kuali/rice/rice-dist/2.0.0-rc2'
+#  creates '/opt/kuali/rice/rice-dist/2.0.0-rc2/kr-dev.war'
+#end
+
+# initialize database
+execute "impex master" do
+  cwd "/opt/sources/rice/db/impex/master"
+  # TODO run mvn validate first, and also check that install completed previously
+  returns [0,1] # allow non-zero because it fails if already complete
+  command "mvn install -Pdb,mysql  -Dimpex.dba.url=jdbc:mysql://localhost " \
+    +"-Dimpex.dba.password=change_me_Q2JED3yHrlVf " \
+    +"-Dimpex.username=RICE -Dimpex.password=RICE -Dimpex.database=rice"
+  action :run
 end
 
 # subversion "RICE" do
