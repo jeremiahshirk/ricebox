@@ -85,11 +85,13 @@ template "/usr/local/rice/log4j.properties" do
  group "vagrant"
  mode 0644
 end
-
-#tar_package 'http://maven.kuali.org/release/org/kuali/rice/rice-dist/2.0.0-rc2/rice-dist-2.0.0-rc2-server.tar.gz' do
-#  prefix '/opt/kuali/rice/rice-dist/2.0.0-rc2'
-#  creates '/opt/kuali/rice/rice-dist/2.0.0-rc2/kr-dev.war'
-#end
+cookbook_file "/usr/local/rice/rice.keystore" do
+  source "rice.keystore"
+  owner "vagrant"
+  group "vagrant"
+  mode "0644"
+  notifies :restart, resources(:service => "tomcat")
+end
 
 # initialize database
 execute "impex master" do
