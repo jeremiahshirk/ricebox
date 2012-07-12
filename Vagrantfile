@@ -7,8 +7,7 @@ Vagrant::Config.run do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  # config.vm.box = "lucid32"
-  config.vm.box = "lucid32-4"
+  config.vm.box = "precise32"
   
   # use a VM memory allocation other than the default of 512 MB
   config.vm.customize [
@@ -43,13 +42,14 @@ Vagrant::Config.run do |config|
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
-  config.vm.share_folder("sources", "/opt/sources", "rice_source",
-    :owner => "vagrant", :group => "vagrant")
+  #config.vm.share_folder("sources", "/opt/sources", "rice_source",
+  #  :owner => "vagrant", :group => "vagrant")
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   #
   config.vm.provision :chef_solo do |chef|
-    # chef.cookbooks_path = ["cookbooks"]
+    chef.cookbooks_path = ["cookbooks","site-cookbooks"]
+    chef.json.merge!({ "nat_hostname" => "localhost" })
     chef.add_recipe("vagrant_main")
   end
 end

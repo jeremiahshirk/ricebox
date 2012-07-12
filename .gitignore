@@ -1,2 +1,4 @@
 .vagrant
-rice_source
+/cookbooks
+/tmp
+Cheffile.lock
