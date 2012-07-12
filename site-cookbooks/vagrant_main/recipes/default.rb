@@ -23,7 +23,6 @@ node.override['tomcat']['java_options'] = '-Xmx512m -XX:MaxPermSize=256m'
 node.override['rice']['datasource']['username'] = 'RICE'
 node.override['rice']['datasource']['password'] = 'RICE'
 node.override['rice']['datasource']['database'] = 'rice'
-#node.override['nat_hostname'] = 'cognus.ome.ksu.edu'
 
 require_recipe "build-essential"
 require_recipe "apt"
