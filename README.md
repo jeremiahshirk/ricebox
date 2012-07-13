@@ -1,13 +1,13 @@
 Using RiceBox
 ========================
 
-RiceBox is a Vagrant playground for Kuali RICE.  To use it, you'll need Vagrant, VirtualBox, and an Ubuntu 12.04 Vagrant box.
+RiceBox is a Vagrant playground for Kuali RICE.  To use it, you'll need Vagrant, VirtualBox, and an Ubuntu 12.04 Vagrant box.  It is currently set up to run a RICE 2.1 demo.
 
-Setting up Vagrant
-----------------------
+---
 
+## Set up the prerequisites
 The best instructions for setting up Vagrant can be found at 
-http://vagrantup.com/v1/docs/getting-started/index.html. The instructions that follow should provide the minimal steps to get started quickly.
+http://vagrantup.com/v1/docs/getting-started/index.html. The instructions that follow should provide the minimal steps to get started quickly.  If you've already got VirtualBox, Vagrant, and git installed, then skip to the next section to download and run RiceBox.
 
 1. ###Install VirtualBox
 <https://www.virtualbox.org/wiki/Downloads>
@@ -21,7 +21,11 @@ http://vagrantup.com/v1/docs/getting-started/index.html. The instructions that f
 
 4. ###Download and install git
 <http://git-scm.com/downloads>
-    
+
+---
+
+## Download and run RiceBox
+
 5. ###Checkout this GitHub project
 
         $ mkdir $HOME/vagrant
@@ -39,7 +43,9 @@ http://vagrantup.com/v1/docs/getting-started/index.html. The instructions that f
 <http://localhost:8080/kr-dev/>
 
     The default username for the demo is _admin_.
-    
+
+---
+
 TODO
 ------------------
 
